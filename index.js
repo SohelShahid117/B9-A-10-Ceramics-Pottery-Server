@@ -22,7 +22,7 @@ app.get('/', (req, res) => {
 })
 
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 // const uri = "mongodb+srv://<username>:<password>@cluster0.hfhifix.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 // const uri = "mongodb+srv://potteryCeramicsUser_09:dWTkiJ9ZH1m8PTiU@cluster0.hfhifix.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
@@ -45,10 +45,62 @@ async function run() {
 
     const potteryCeramicsDB = client.db("poteryCeramicsDB").collection("potteryCeramics")
 
+    //CREATE
     app.post("/addPotteryCeramics",async(req,res)=>{
       const newPotteryCeramics = req.body
       console.log(newPotteryCeramics)
       const result = await potteryCeramicsDB.insertOne(newPotteryCeramics);
+      console.log(result)
+      res.send(result)
+    })
+
+    //READ
+    app.get("/myPotteryCeramics",async(req,res)=>{
+      const cursor = await potteryCeramicsDB.find().toArray();
+      console.log(cursor)
+      res.send(cursor)
+    })
+
+
+    //DELETE
+    app.delete("/myPotteryCeramics/:_id",async(req,res)=>{
+      const _id = req.params._id
+      console.log(_id)
+      const query = { _id: new ObjectId(_id )};
+      const result = await potteryCeramicsDB.deleteOne(query);
+      console.log(result)
+      res.send(result)
+    })
+
+
+    //UPDATE
+    app.get("/myPotteryCeramics/:_id",async(req,res)=>{
+      const _id = req.params._id
+      console.log(_id)
+      const query = { _id: new ObjectId(_id )};
+      const result = await potteryCeramicsDB.findOne(query)
+      console.log(result)
+      res.send(result)
+    })
+
+    app.put(`/updatePotteryCeramics/:_id`,async(req,res)=>{
+      const _id = req.params._id
+      const filter = { _id: new ObjectId(_id) };
+      const options = { upsert: true };
+      const updatePotteryCeramics = req.body
+      const PotteryCeramics = {
+        $set: {
+          name:updatePotteryCeramics.name,
+          quantity:updatePotteryCeramics.quantity,
+          supplier:updatePotteryCeramics.supplier,
+          photo:updatePotteryCeramics.photo,
+          description:updatePotteryCeramics.description,
+          price:updatePotteryCeramics.price,
+          status:updatePotteryCeramics.status,
+          rating:updatePotteryCeramics.rating,
+        },
+      };
+      const result = await potteryCeramicsDB.updateOne(filter, PotteryCeramics, options);
       console.log(result)
       res.send(result)
     })
