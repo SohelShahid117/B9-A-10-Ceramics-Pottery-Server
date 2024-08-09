@@ -131,10 +131,38 @@ async function run() {
 
     //DELETE
     app.delete(`/users/:_id`,async(req,res)=>{
+      const _id = req.params._id
       const query = { _id: new ObjectId(_id)};
-      const result = await movies.deleteOne(query);
+      const result = await usersCeramicsCollection.deleteOne(query);
       res.send(result)
     })
+
+
+    //UPDATE
+    app.patch(`/users/:_id`,async(req,res)=>{
+      const _id = req.params._id
+      console.log(_id)
+      const query = { _id: new ObjectId(_id )};
+      const result = await usersCeramicsCollection.findOne(query)
+      console.log(result)
+      res.send(result)
+    })
+
+    app.patch(`/users/:_id`,async(req,res)=>{
+      const _id = req.params._id
+      const filter = { _id: new ObjectId(_id) };
+      const options = { upsert: true };
+      const updateUsers = req.body
+      const usersss = {
+        $set: {
+          email:updateUsers.email,
+        },
+      };
+      const result = await usersCeramicsCollection.updateOne(filter, usersss, options);
+      console.log(result)
+      res.send(result)
+    })
+
 
 
 
