@@ -44,7 +44,9 @@ async function run() {
     await client.connect();
 
     const potteryCeramicsDB = client.db("poteryCeramicsDB").collection("potteryCeramics")
+    const usersCeramicsCollection = client.db("poteryCeramicsDB").collection("users")
 
+    //pottery_ceramics related API
     //CREATE
     app.post("/addPotteryCeramics",async(req,res)=>{
       const newPotteryCeramics = req.body
@@ -102,6 +104,35 @@ async function run() {
       };
       const result = await potteryCeramicsDB.updateOne(filter, PotteryCeramics, options);
       console.log(result)
+      res.send(result)
+    })
+
+
+    //users related API
+    //CREATE
+    app.post("/user",async(req,res)=>{
+      const user = req.body
+      console.log(user)
+      // const doc = {
+      //   title: "Record of a Shriveled Datum",
+      //   content: "No bytes, no problem. Just insert a document, in MongoDB",
+      // }
+      // const result = await usersCeramicsCollection.insertOne(doc);
+      const result = await usersCeramicsCollection.insertOne(user);
+      console.log(result)
+      res.send(result)
+    })
+
+    //READ
+    app.get("/users",async(req,res)=>{
+      const cursor = await usersCeramicsCollection.find().toArray();
+      res.send(cursor)
+    })
+
+    //DELETE
+    app.delete(`/users/:_id`,async(req,res)=>{
+      const query = { _id: new ObjectId(_id)};
+      const result = await movies.deleteOne(query);
       res.send(result)
     })
 
