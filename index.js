@@ -153,6 +153,9 @@ async function run() {
       const users = {
         $set: {
           email:updateUsers.email,
+          username:updateUsers.username,
+          password:updateUsers.password,
+          photo:updateUsers.photo,
         },
       };
       const result = await usersCeramicsCollection.updateOne(filter, users, options);
