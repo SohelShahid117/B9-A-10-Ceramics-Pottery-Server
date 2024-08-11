@@ -44,7 +44,7 @@ async function run() {
     await client.connect();
 
     const potteryCeramicsDB = client.db("poteryCeramicsDB").collection("potteryCeramics")
-    const usersCeramicsCollection = client.db("poteryCeramicsDB").collection("users")
+    const usersCeramicsCollection = client.db("poteryCeramicsDB").collection("potteryUsers")
 
     //pottery_ceramics related API
     //CREATE
@@ -110,36 +110,33 @@ async function run() {
 
     //users related API
     //CREATE
-    app.post("/user",async(req,res)=>{
+    app.post("/createUser",async(req,res)=>{
       const user = req.body
       console.log(user)
-      // const doc = {
-      //   title: "Record of a Shriveled Datum",
-      //   content: "No bytes, no problem. Just insert a document, in MongoDB",
-      // }
-      // const result = await usersCeramicsCollection.insertOne(doc);
       const result = await usersCeramicsCollection.insertOne(user);
       console.log(result)
       res.send(result)
     })
 
     //READ
-    app.get("/users",async(req,res)=>{
-      const cursor = await usersCeramicsCollection.find().toArray();
-      res.send(cursor)
+    app.get("/getAllUser",async(req,res)=>{
+      const result = await usersCeramicsCollection.find().toArray();
+      console.log(result)
+      res.send(result)
     })
 
     //DELETE
-    app.delete(`/users/:_id`,async(req,res)=>{
+    app.delete(`/deleteAUser/:_id`,async(req,res)=>{
       const _id = req.params._id
       const query = { _id: new ObjectId(_id)};
       const result = await usersCeramicsCollection.deleteOne(query);
+      console.log(result)
       res.send(result)
     })
 
 
     //UPDATE
-    app.patch(`/users/:_id`,async(req,res)=>{
+    app.get(`/getOneUser/:_id`,async(req,res)=>{
       const _id = req.params._id
       console.log(_id)
       const query = { _id: new ObjectId(_id )};
@@ -148,22 +145,20 @@ async function run() {
       res.send(result)
     })
 
-    app.patch(`/users/:_id`,async(req,res)=>{
+    app.put(`/updateOneUser/:_id`,async(req,res)=>{
       const _id = req.params._id
       const filter = { _id: new ObjectId(_id) };
       const options = { upsert: true };
       const updateUsers = req.body
-      const usersss = {
+      const users = {
         $set: {
           email:updateUsers.email,
         },
       };
-      const result = await usersCeramicsCollection.updateOne(filter, usersss, options);
+      const result = await usersCeramicsCollection.updateOne(filter, users, options);
       console.log(result)
       res.send(result)
     })
-
-
 
 
     // Send a ping to confirm a successful connection
