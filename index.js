@@ -7,6 +7,8 @@ require('dotenv').config()
 const app = express()
 const port = process.env.PORT || 3000
 
+// import PotteryCeramics from './models/pottery'
+
 
 //middleware
 app.use(cors())
@@ -24,6 +26,8 @@ app.get('/', (req, res) => {
 
 
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+// const { PotteryCeramics } = require('./models/pottery')
+// const { default: PotteryCeramicsss } = require('./models/pottery')
 // const uri = "mongodb+srv://<username>:<password>@cluster0.hfhifix.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 // const uri = "mongodb+srv://potteryCeramicsUser_09:dWTkiJ9ZH1m8PTiU@cluster0.hfhifix.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
@@ -50,12 +54,16 @@ async function run() {
     //pottery_ceramics related API
     //CREATE
     app.post("/addPotteryCeramics",async(req,res)=>{
+      // const newPotteryCeramics1 = new PotteryCeramics()
+      //  const newPotteryCeramics1 = new PotteryCeramics()
+
       const newPotteryCeramics = req.body
       console.log(newPotteryCeramics)
       const result = await potteryCeramicsDB.insertOne(newPotteryCeramics);
       console.log(result)
       res.send(result)
     })
+
 
     //READ
     app.get("/myPotteryCeramics",async(req,res)=>{
