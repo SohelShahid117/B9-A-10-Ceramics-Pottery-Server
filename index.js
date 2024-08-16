@@ -55,7 +55,7 @@ async function run() {
     //CREATE
     app.post("/addPotteryCeramics",async(req,res)=>{
       // const newPotteryCeramics1 = new PotteryCeramics()
-      //  const newPotteryCeramics1 = new PotteryCeramics()
+      //  const newPotteryCeramics1 = new PotteryCceramics()
 
       const newPotteryCeramics = req.body
       console.log(newPotteryCeramics)
